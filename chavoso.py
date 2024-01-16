@@ -13,17 +13,19 @@ parser = argparse.ArgumentParser(
     epilog="Exemplo de uso: python script.py urls-js.txt -o resultado.txt -silent"
 )
 
-parser.add_argument("file_path", metavar="arquivo_urls.txt", type=str, help="Caminho para o arquivo contendo as URLs")
-parser.add_argument("-o", dest="output_file", metavar="output.txt", type=str, help="Caminho para o arquivo de saída")
-parser.add_argument("-silent", dest="silent", action="store_true", help="Executar em modo silencioso, sem exibir o banner")
+parser.add_argument("inputs", nargs="+", help="URLs ou palavras-chave diretamente na linha de comando ou caminho para arquivo de texto")
+parser.add_argument("-o", metavar="output.txt", type=str, help="Caminho para o arquivo de saída")
+parser.add_argument("-silent", action="store_true", help="Executar em modo silencioso, sem exibir o banner")
 
 # Analisar os argumentos da linha de comando
 args = parser.parse_args()
 
 # Exibir banner, a menos que -silent esteja definido
 if not args.silent:
+    # Assinatura do autor
     print("\033[34m")
     print("""                               
+                                                          
                   ____        ____        ____    
                 /  _  |      / ___)      |  _ \   
                 | |_| |  _   | |     _   | | | |   
@@ -66,26 +68,35 @@ def search_keywords(url):
 
     return grouped_matches
 
-# ...
-
-file_path = args.file_path
+# Se foram fornecidas URLs diretamente na linha de comando ou via arquivo, use-as; caso contrário, leia a partir do arquivo padrão
+inputs = args.inputs if args.inputs else sys.stdin.read().splitlines()
 
 all_results = {}
 
-with open(file_path, 'r') as file:
-    for line in file:
-        results = search_keywords(line.strip())
-        for keyword in results:
-            all_results.setdefault(keyword, []).extend(results[keyword])
+for input_data in inputs:
+    if input_data.startswith("http://") or input_data.startswith("https://"):
+        # Se a entrada é uma URL, use-a diretamente
+        results = search_keywords(input_data)
+    else:
+        # Caso contrário, assume-se que é um caminho para um arquivo de texto e lê as entradas do arquivo
+        try:
+            with open(input_data, 'r') as file:
+                for line in file:
+                    results = search_keywords(line.strip())
+                    for keyword in results:
+                        all_results.setdefault(keyword, []).extend(results[keyword])
+        except FileNotFoundError:
+            print(f"\033[31mArquivo não encontrado: {input_data}\033[0m")
+            sys.exit(1)
 
 # Imprimir os resultados em ordem
 for keyword in all_results:
     for result in all_results[keyword]:
         print(result)
 
-# Salvar os resultados em um arquivo, se a opção -o estiver definida
-if args.output_file:
-    with open(args.output_file, 'w') as output_file:
+# Se foi especificado um arquivo de saída, gravar os resultados nele
+if args.o:
+    with open(args.o, 'w') as output_file:
         for keyword in all_results:
             for result in all_results[keyword]:
                 output_file.write(result + "\n")
