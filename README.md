@@ -37,7 +37,9 @@ python3 chavoso.py urls_js.txt [-o output.txt] [-silent]
 ## Argumentos
 
 urls_js.txt: Caminho para o arquivo contendo as URLs JavaScript.
+
 -o output.txt: Caminho opcional para o arquivo de saída.
+
 -silent: Executar em modo silencioso, sem exibir o banner.
 
 Lembre-se de personalizar a lista de palavras conforme necessário. Este script é fornecido "como está", sem garantias de qualquer tipo. Use-o com responsabilidade e sempre respeite as leis e regulamentações locais.
