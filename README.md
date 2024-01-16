@@ -1,5 +1,6 @@
 # Recon JS
-![image](https://github.com/lucasfagiolli/Drake/assets/85661349/46214921-6584-4300-a461-e6fe2970f90e)
+![image](https://github.com/lucasfagiolli/Drake/assets/85661349/facc2da7-e6f4-49a4-8c3d-49935fbc306d)
+
 
 
 Este é um script simples em Python para procurar palavras-chave sensíveis em URLs JavaScript.
