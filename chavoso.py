@@ -54,6 +54,8 @@ def search_keywords(url):
         "api_secret": [],
         "aws_access_key_id": [],
         "aws_secret_access_key": [],
+        "ADMINBAR_ACCESS_TOKEN": [],
+        "AWS_SECRET_ACCESS_KEY": [],
         "password": [],
         "secret": [],
         "token": [],
